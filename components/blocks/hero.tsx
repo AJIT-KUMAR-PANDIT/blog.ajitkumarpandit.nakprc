@@ -59,27 +59,27 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
 
   return (
     <Section background={data.background!}>
-      <div className='text-center sm:mx-auto lg:mr-auto lg:mt-0'>
+      <div className="mx-auto max-w-[1024px] px-4 sm:px-5">
         {data.headline && (
           <div data-tina-field={tinaField(data, 'headline')}>
-            <TextEffect preset='fade-in-blur' speedSegment={0.3} as='h1' className='mt-8 text-balance text-6xl md:text-7xl xl:text-[5.25rem]'>
+            <TextEffect preset='fade-in-blur' speedSegment={0.3} as='h1' className='mt-8 text-balance font-bold tracking-tight text-[40px] leading-none md:text-[56px]' style={{ WebkitFontSmoothing: "antialiased", letterSpacing: "-0.03em" }}>
               {data.headline!}
             </TextEffect>
           </div>
         )}
         {data.tagline && (
           <div data-tina-field={tinaField(data, 'tagline')}>
-            <TextEffect per='line' preset='fade-in-blur' speedSegment={0.3} delay={0.5} as='p' className='mx-auto mt-8 max-w-2xl text-balance text-lg'>
+            <TextEffect per='line' preset='fade-in-blur' speedSegment={0.3} delay={0.5} as='p' className='mx-auto mt-5 max-w-2xl text-[18px] leading-relaxed text-[var(--ios-text-secondary)]'>
               {data.tagline!}
             </TextEffect>
           </div>
         )}
 
-        <AnimatedGroup variants={transitionVariants} className='mt-12 flex flex-col items-center justify-center gap-2 md:flex-row'>
+        <AnimatedGroup variants={transitionVariants} className='mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row'>
           {data.actions &&
             data.actions.map((action) => (
-              <div key={action!.label} data-tina-field={tinaField(action)} className='bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5'>
-                <Button asChild size='lg' variant={action!.type === 'link' ? 'ghost' : 'default'} className='rounded-xl px-5 text-base'>
+              <div key={action!.label} data-tina-field={tinaField(action)}>
+                <Button asChild size='lg' variant={action!.type === 'link' ? 'ghost' : 'default'} className={action!.type === 'button' ? 'rounded-xl bg-[var(--ios-blue)] text-white hover:bg-[var(--ios-blue)]/90 font-semibold px-6 h-[42px] text-[16px]' : 'rounded-xl border border-[var(--ios-separator)] px-6 h-[42px] text-[16px]'}>
                   <Link href={action!.link!}>
                     {action?.icon && <Icon data={action?.icon} />}
                     <span className='text-nowrap'>{action!.label}</span>
@@ -92,9 +92,9 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
 
       {data.image && (
         <AnimatedGroup variants={transitionVariants}>
-          <div className='relative -mr-56 mt-8 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-20 max-w-full' data-tina-field={tinaField(data, 'image')}>
+          <div className='relative -mr-56 mt-10 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-16 max-w-full mx-auto'>
             <div aria-hidden className='bg-linear-to-b absolute inset-0 z-10 from-transparent from-35% pointer-events-none' style={gradientStyle} />
-            <div className='inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1'>
+            <div className="mx-auto max-w-3xl overflow-hidden rounded-[20px] border border-[var(--ios-separator)] shadow-lg shadow-zinc-950/8 ring-1 ring-[var(--ios-separator)]">
               <ImageBlock image={data.image} />
             </div>
           </div>

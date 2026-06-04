@@ -6,9 +6,19 @@ import ClientPage from "./[...urlSegments]/client-page";
 export const revalidate = 300;
 
 export default async function Home() {
-  const data = await client.queries.page({
-    relativePath: `home.mdx`,
-  });
+  let data: any;
+  try {
+    data = await client.queries.page({
+      relativePath: `home.mdx`,
+    });
+  } catch {
+    // Local dev without Tina credentials — render empty content
+    data = {
+      data: { page: null },
+      variables: { relativePath: "home.mdx" },
+      query: "",
+    };
+  }
 
   return (
     <Layout rawPageData={data}>

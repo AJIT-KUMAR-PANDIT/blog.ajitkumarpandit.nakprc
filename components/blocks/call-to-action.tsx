@@ -10,28 +10,38 @@ import { Section } from '../layout/section';
 export const CallToAction = ({ data }: { data: PageBlocksCta }) => {
     return (
         <Section>
-            <div className="text-center">
-                <h2 className="text-balance text-4xl font-semibold lg:text-5xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
-                <p className="mt-4" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
+            <div className="mx-auto max-w-[1024px] px-4 sm:px-5">
+                {/* iOS section header */}
+                <div className="mb-3 ml-3.5">
+                    <h2 data-tina-field={tinaField(data, 'title')} className="text-[22px] font-bold tracking-tight text-[var(--ios-text-primary)]" style={{ WebkitFontSmoothing: "antialiased", letterSpacing: "-0.025em" }}>
+                        {data.title}
+                    </h2>
+                </div>
 
-                <div className="mt-12 flex flex-wrap justify-center gap-4">
-                    {data.actions && data.actions.map(action => (
-                        <div
-                            key={action!.label}
-                            data-tina-field={tinaField(action)}
-                            className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5">
-                            <Button
-                                asChild
-                                size="lg"
-                                variant={action!.type === 'link' ? 'ghost' : 'default'}
-                                className="rounded-xl px-5 text-base">
-                                <Link href={action!.link!}>
-                                    {action?.icon && (<Icon data={action?.icon} />)}
-                                    <span className="text-nowrap">{action!.label}</span>
-                                </Link>
-                            </Button>
-                        </div>
-                    ))}
+                <p data-tina-field={tinaField(data, 'description')} className="mb-6 ml-3.5 text-[15px] leading-relaxed text-[var(--ios-text-secondary)]">
+                    {data.description}
+                </p>
+
+                {/* iOS-style grouped card with buttons */}
+                <div className="section-card p-0 overflow-hidden" style={{ boxShadow: '0 0 0 0.5px var(--ios-separator), 0 1px 3px rgba(0,0,0,0.04)' }}>
+                    <div className="flex flex-wrap items-center justify-center gap-2 p-5">
+                        {data.actions && data.actions.map(action => (
+                            <div
+                                key={action!.label}
+                                data-tina-field={tinaField(action)}>
+                                <Button
+                                    asChild
+                                    size="lg"
+                                    variant={action!.type === 'link' ? 'ghost' : 'default'}
+                                    className={action!.type === 'button' ? 'rounded-xl bg-[var(--ios-blue)] text-white hover:bg-[var(--ios-blue)]/90 font-semibold px-6 h-[38px] text-[15px]' : 'rounded-xl border border-[var(--ios-separator)] text-[var(--ios-text-primary)] hover:bg-[var(--ios-bg)] font-medium px-6 h-[38px] text-[15px]'}>
+                                    <Link href={action!.link!}>
+                                        {action?.icon && (<Icon data={action?.icon} />)}
+                                        <span className="text-nowrap">{action!.label}</span>
+                                    </Link>
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </Section>

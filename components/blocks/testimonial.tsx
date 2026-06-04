@@ -3,50 +3,57 @@ import type { Template } from "tinacms";
 import { PageBlocksTestimonial, PageBlocksTestimonialTestimonials } from "../../tina/__generated__/types";
 import { Section } from "../layout/section";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Card, CardContent } from "../ui/card";
 import { tinaField } from "tinacms/dist/react";
 import { sectionBlockSchemaField } from '../layout/section';
 
 export const Testimonial = ({ data }: { data: PageBlocksTestimonial }) => {
   return (
     <Section background={data.background!}>
-      <div className="text-center">
-        <h2 className="text-title text-3xl font-semibold" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
-        <p className="text-body mt-6" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
-      </div>
-      <div className="mt-8 [column-width:300px] [column-gap:1.5rem] md:mt-12">
-        {data.testimonials?.map((testimonial, index) => (
-          <TestimonialCard key={index} testimonial={testimonial!} />
-        ))}
+      <div className="mx-auto max-w-[1024px] px-4 sm:px-5">
+        {/* iOS section header */}
+        <div className="mb-3 ml-3.5">
+          <h2 data-tina-field={tinaField(data, 'title')} className="text-[22px] font-bold tracking-tight text-[var(--ios-text-primary)]" style={{ WebkitFontSmoothing: "antialiased", letterSpacing: "-0.025em" }}>
+            {data.title}
+          </h2>
+        </div>
+
+        {/* Grouped container */}
+        <div className="section-card p-0 overflow-hidden" style={{ boxShadow: '0 0 0 0.5px var(--ios-separator), 0 1px 3px rgba(0,0,0,0.04)' }}>
+          {data.testimonials?.map((testimonial, index) => (
+            <TestimonialCard key={index} testimonial={testimonial!} isLast={index === data.testimonials!.length - 1} />
+          ))}
+        </div>
+
+        <p data-tina-field={tinaField(data, 'description')} className="mt-3 ml-3.5 text-[15px] leading-relaxed text-[var(--ios-text-secondary)]">
+          {data.description}
+        </p>
       </div>
     </Section>
   );
 };
 
-const TestimonialCard = ({ testimonial }: { testimonial: PageBlocksTestimonialTestimonials }) => {
-  return (
-    <Card className="mb-6 break-inside-avoid">
-      <CardContent className="grid grid-cols-[auto_1fr] gap-3 pt-6">
-        <Avatar className="size-9" data-tina-field={tinaField(testimonial, 'avatar')}>
-          {testimonial.avatar && (
-            <AvatarImage alt={testimonial.author!} src={testimonial.avatar} loading="lazy" width="120" height="120" />
-          )}
-          <AvatarFallback>{testimonial.author!.split(" ").map((word) => word[0]).join("")}</AvatarFallback>
-        </Avatar>
+const TestimonialCard = ({ testimonial, isLast }: { testimonial: PageBlocksTestimonialTestimonials; isLast: boolean }) => (
+  <div className={!isLast ? 'border-b border-[var(--ios-separator)]' : ''}>
+    <div className="grouped-list-item !py-3">
+      <Avatar className="size-9 shrink-0 border border-[var(--ios-separator)]" data-tina-field={tinaField(testimonial, 'avatar')}>
+        {testimonial.avatar && (
+          <AvatarImage alt={testimonial.author!} src={testimonial.avatar} loading="lazy" width="120" height="120" />
+        )}
+        <AvatarFallback className="text-[13px] font-semibold text-[var(--ios-text-tertiary)]">
+          {testimonial.author!.split(" ").map((word) => word[0]).join("")}
+        </AvatarFallback>
+      </Avatar>
 
-        <div>
-          <h3 className="font-medium" data-tina-field={tinaField(testimonial, 'author')}>{testimonial.author}</h3>
-
-          <span className="text-muted-foreground block text-sm tracking-wide" data-tina-field={tinaField(testimonial, 'role')}>{testimonial.role}</span>
-
-          <blockquote className="mt-3" data-tina-field={tinaField(testimonial, 'quote')}>
-            <p className="text-gray-700 dark:text-gray-300">{testimonial.quote}</p>
-          </blockquote>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+      <div className="flex-1 min-w-0">
+        <h3 className="text-[17px] font-semibold tracking-tight text-[var(--ios-text-primary)]" data-tina-field={tinaField(testimonial, 'author')}>{testimonial.author}</h3>
+        <span className="text-[14px] text-[var(--ios-blue)] font-medium" data-tina-field={tinaField(testimonial, 'role')}>{testimonial.role}</span>
+        <blockquote className="mt-2 text-[15px] leading-relaxed text-[var(--ios-text-secondary)] italic" data-tina-field={tinaField(testimonial, 'quote')}>
+          "{testimonial.quote}"
+        </blockquote>
+      </div>
+    </div>
+  </div>
+);
 
 export const testimonialBlockSchema: Template = {
   name: "testimonial",

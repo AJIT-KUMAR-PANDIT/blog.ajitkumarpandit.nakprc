@@ -7,20 +7,33 @@ import { sectionBlockSchemaField } from '../layout/section';
 export const Stats = ({ data }: { data: PageBlocksStats }) => {
     return (
         <Section background={data.background!}>
-            <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
-                <div className="relative z-10 mx-auto max-w-xl space-y-6 text-center">
-                    <h2 className="text-4xl font-medium lg:text-5xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
-                    <p data-tina-field={tinaField(data, 'description')}>{data.description}</p>
+            <div className="mx-auto max-w-[1024px] px-4 sm:px-5">
+                {/* iOS section header */}
+                <div className="mb-3 ml-3.5">
+                    <h2 data-tina-field={tinaField(data, 'title')} className="text-[22px] font-bold tracking-tight text-[var(--ios-text-primary)]" style={{ WebkitFontSmoothing: "antialiased", letterSpacing: "-0.025em" }}>
+                        {data.title}
+                    </h2>
                 </div>
 
-                <div className="grid divide-y *:text-center md:grid-cols-3 md:divide-x md:divide-y-0">
-                    {data.stats?.map((stat) => (
-                        <div key={stat?.type} className="space-y-4 py-4">
-                            <div className="text-5xl font-bold" data-tina-field={tinaField(stat, 'stat')}>{stat!.stat}</div>
-                            <p data-tina-field={tinaField(stat, 'type')}>{stat!.type}</p>
-                        </div>
-                    ))}
+                {/* Grouped container */}
+                <div className="section-card overflow-hidden px-4 py-8 sm:px-6" style={{ boxShadow: '0 0 0 0.5px var(--ios-separator), 0 1px 3px rgba(0,0,0,0.04)' }}>
+                    <div className="grid gap-8 text-center md:grid-cols-3">
+                        {data.stats?.map((stat) => (
+                            <div key={stat?.type} className="space-y-1.5">
+                                <div data-tina-field={tinaField(stat, 'stat')} className="text-[40px] font-bold tracking-tighter text-[var(--ios-blue)] leading-none" style={{ WebkitFontSmoothing: "antialiased" }}>
+                                    {stat!.stat}
+                                </div>
+                                <p data-tina-field={tinaField(stat, 'type')} className="text-[15px] font-medium text-[var(--ios-text-secondary)]">
+                                    {stat!.type}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
+
+                <p data-tina-field={tinaField(data, 'description')} className="mt-3 ml-3.5 text-[15px] leading-relaxed text-[var(--ios-text-secondary)]">
+                    {data.description}
+                </p>
             </div>
         </Section>
     )

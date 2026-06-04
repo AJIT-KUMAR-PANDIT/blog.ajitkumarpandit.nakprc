@@ -3,60 +3,32 @@ import Link from 'next/link';
 import type { Template } from 'tinacms';
 import { tinaField } from 'tinacms/dist/react';
 import { PageBlocksCallout } from '@/tina/__generated__/types';
-import { ArrowRight } from 'lucide-react';
-import { AnimatedGroup } from '../motion-primitives/animated-group';
-import { Section, sectionBlockSchemaField } from '../layout/section';
-import type { Transition } from 'motion/react';
-
-const transitionVariants = {
-    item: {
-        hidden: {
-            opacity: 0,
-            filter: 'blur(12px)',
-            y: 12,
-        },
-        visible: {
-            opacity: 1,
-            filter: 'blur(0px)',
-            y: 0,
-            transition: {
-                type: 'spring',
-                bounce: 0.3,
-                duration: 1.5,
-            } as Transition,
-        },
-    },
-};
+import { Section } from '../layout/section';
 
 export const Callout = ({ data }: { data: PageBlocksCallout }) => {
     return (
-        <Section background={data.background!} className='py-6'>
-            <AnimatedGroup variants={transitionVariants}>
+        <Section className='py-6'>
+            <div className="mx-auto max-w-[1024px] px-4 sm:px-5">
+                {/* iOS grouped list callout */}
                 <Link
                     data-tina-field={tinaField(data, 'url')}
                     href={data.url!}
-                    className='hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950'
+                    className='group flex items-center gap-3 rounded-xl bg-[var(--ios-surface)] px-4 py-3.5 transition-all duration-[300ms] ease-[var(--spring-damp)] active:scale-[0.98] hover:bg-[var(--ios-bg)] block mx-auto max-w-lg'
+                    style={{ boxShadow: '0 0 0 0.5px var(--ios-separator), 0 1px 3px rgba(0,0,0,0.04)' }}
                 >
-                    <span data-tina-field={tinaField(data, 'text')} className='text-foreground text-sm'>
+                    <span data-tina-field={tinaField(data, 'text')} className='flex-1 text-[15px] font-medium text-[var(--ios-text-primary)] leading-snug tracking-tight'>
                         {data.text}
                     </span>
-                    <span className='dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700'></span>
 
-                    <div className='bg-background group-hover:bg-muted size-6 overflow-hidden rounded-full duration-500'>
-                        <div className='flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0'>
-                            <span className='flex size-6'>
-                                <ArrowRight className='m-auto size-3' />
-                            </span>
-                            <span className='flex size-6'>
-                                <ArrowRight className='m-auto size-3' />
-                            </span>
-                        </div>
-                    </div>
+                    <svg className="size-[19px] shrink-0 text-[var(--ios-blue)] transition-all duration-300 group-hover:translate-x-[2px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
                 </Link>
-            </AnimatedGroup>
+            </div>
         </Section>
     );
 };
+
 
 export const calloutBlockSchema: Template = {
     name: 'callout',
@@ -69,7 +41,6 @@ export const calloutBlockSchema: Template = {
         },
     },
     fields: [
-        sectionBlockSchemaField as any,
         {
             type: 'string',
             label: 'Text',

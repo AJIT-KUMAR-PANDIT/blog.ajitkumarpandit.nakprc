@@ -1,25 +1,15 @@
 'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { tinaField, useTina } from 'tinacms/dist/react';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { PostQuery } from '@/tina/__generated__/types';
-import { useLayout } from '@/components/layout/layout-context';
-import { Section } from '@/components/layout/section';
-import { components } from '@/components/mdx-components';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserRound } from 'lucide-react';
 import ErrorBoundary from '@/components/error-boundary';
-
-const titleColorClasses = {
-  blue: 'from-blue-400 to-blue-600 dark:from-blue-300 dark:to-blue-500',
-  teal: 'from-teal-400 to-teal-600 dark:from-teal-300 dark:to-teal-500',
-  green: 'from-green-400 to-green-600',
-  red: 'from-red-400 to-red-600',
-  pink: 'from-pink-300 to-pink-500',
-  purple: 'from-purple-400 to-purple-600 dark:from-purple-300 dark:to-purple-500',
-  orange: 'from-orange-300 to-orange-600 dark:from-orange-200 dark:to-orange-500',
-  yellow: 'from-yellow-400 to-yellow-500 dark:from-yellow-300 dark:to-yellow-500',
-};
+import { components } from '@/components/mdx-components';
 
 interface ClientPostProps {
   data: PostQuery;
@@ -30,90 +20,93 @@ interface ClientPostProps {
 }
 
 export default function PostClientPage(props: ClientPostProps) {
-  const { theme } = useLayout();
   const { data } = useTina({ ...props });
   const post = data.post;
 
   const date = new Date(post.date!);
-  let formattedDate = '';
-  if (!isNaN(date.getTime())) {
-    formattedDate = format(date, 'MMM dd, yyyy');
-  }
-
-  const titleColour = titleColorClasses[theme!.color! as keyof typeof titleColorClasses];
+  const formattedDate = !isNaN(date.getTime()) ? format(date, 'MMMM dd, yyyy') : '';
 
   return (
     <ErrorBoundary>
-      <Section>
-        <h2 data-tina-field={tinaField(post, 'title')} className={`w-full relative\tmb-8 text-6xl font-extrabold tracking-normal text-center title-font`}>
-          <span className={`bg-clip-text text-transparent bg-linear-to-r ${titleColour}`}>{post.title}</span>
-        </h2>
-        <div data-tina-field={tinaField(post, 'author')} className='flex items-center justify-center mb-16'>
-          {post.author && (
-            <>
-              {post.author.avatar && (
-                <div className='shrink-0 mr-4'>
-                  <Image
-                    data-tina-field={tinaField(post.author, 'avatar')}
-                    priority={true}
-                    className='h-14 w-14 object-cover rounded-full shadow-xs'
-                    src={post.author.avatar}
-                    alt={post.author.name}
-                    width={500}
-                    height={500}
-                  />
-                </div>
-              )}
-              <p
-                data-tina-field={tinaField(post.author, 'name')}
-                className='text-base font-medium text-gray-600 group-hover:text-gray-800 dark:text-gray-200 dark:group-hover:text-white'
-              >
-                {post.author.name}
-              </p>
-              <span className='font-bold text-gray-200 dark:text-gray-500 mx-2'>—</span>
-            </>
-          )}
-          <p
-            data-tina-field={tinaField(post, 'date')}
-            className='text-base text-gray-400 group-hover:text-gray-500 dark:text-gray-300 dark:group-hover:text-gray-150'
-          >
-            {formattedDate}
-          </p>
-        </div>
-        {post.heroImg && (
-          <div className='px-4 w-full'>
-            <div data-tina-field={tinaField(post, 'heroImg')} className='relative max-w-4xl lg:max-w-5xl mx-auto'>
-              <Image
-                priority={true}
-                src={post.heroImg}
-                alt={post.title}
-                className='absolute block mx-auto rounded-lg w-full h-auto blur-2xl brightness-150 contrast-[0.9] dark:brightness-150 saturate-200 opacity-50 dark:opacity-30 mix-blend-multiply dark:mix-blend-hard-light'
-                aria-hidden='true'
-                width={500}
-                height={500}
-                style={{ maxHeight: '25vh' }}
-              />
-              <Image
-                priority={true}
-                src={post.heroImg}
-                alt={post.title}
-                width={500}
-                height={500}
-                className='relative z-10 mb-14 mx-auto block rounded-lg w-full h-auto opacity-100'
-                style={{ maxWidth: '25vh' }}
-              />
-            </div>
+      {/* Post hero image with blur backdrop */}
+      {post.heroImg && (
+        <div className="relative mx-auto max-w-[1024px] px-4 sm:px-5 pt-2">
+          <div className="relative overflow-hidden rounded-[20px] border border-[var(--ios-separator)] shadow-lg" style={{ boxShadow: '0 0 0 0.5px var(--ios-separator), 0 4px 16px rgba(0,0,0,0.08)' }}>
+            {/* Blur backdrop */}
+            <Image
+              src={post.heroImg}
+              alt=""
+              fill
+              className="absolute inset-0 blur-2xl brightness-[0.3] scale-110"
+              aria-hidden="true"
+              priority
+            />
+            <Image
+              priority={true}
+              src={post.heroImg}
+              alt={post.title}
+              width={1200}
+              height={630}
+              className="relative z-10 w-full h-auto rounded-[20px]"
+            />
           </div>
-        )}
-        <div data-tina-field={tinaField(post, '_body')} className='prose dark:prose-dark w-full max-w-none'>
+        </div>
+      )}
+
+      {/* Author & date in iOS grouped list */}
+      <div className="mx-auto max-w-[680px] px-4 sm:px-5 mt-6 mb-6">
+        <div className="section-card p-0 overflow-hidden" style={{ boxShadow: '0 0 0 0.5px var(--ios-separator), 0 1px 3px rgba(0,0,0,0.04)' }}>
+          {/* Author row */}
+          {post.author && (
+            <div className="grouped-list-item !py-3">
+              <Avatar className="size-10 shrink-0 border border-[var(--ios-separator)]">
+                {post.author.avatar && (
+                  <AvatarImage src={post.author.avatar} alt={post.author.name} className="rounded-full" />
+                )}
+                <AvatarFallback>
+                  <UserRound size={16} strokeWidth={2} className="opacity-50 text-[var(--ios-text-quaternary)]" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p data-tina-field={tinaField(post.author, 'name')} className="text-[17px] font-semibold text-[var(--ios-text-primary)] leading-snug tracking-tight" style={{ WebkitFontSmoothing: "antialiased" }}>
+                  {post.author.name}
+                </p>
+                <p className="text-[14px] text-[var(--ios-text-tertiary)]">Author</p>
+              </div>
+            </div>
+          )}
+
+          {/* Date row */}
+          <div className="grouped-list-item !py-3">
+            <div className="shrink-0 flex items-center justify-center size-[36px] rounded-xl bg-[var(--ios-blue)]/12 text-[var(--ios-blue)]">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                <path d="M6 3V2h2v1h6V2h2v1h1a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h1zm0 6v9a1 1 0 001 1h12a1 1 0 001-1V9H6zm7 2l3 3-3 3-1.41-1.41L15.67 14H11v-2h4.67l-2.09-2.09L14 9z" />
+              </svg>
+            </div>
+            <span className="text-[17px] text-[var(--ios-text-primary)] font-medium">{formattedDate}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Title */}
+      <div className="mx-auto max-w-[680px] px-4 sm:px-5 mb-4">
+        <h1 data-tina-field={tinaField(post, 'title')} className="font-bold tracking-tighter text-[32px] leading-none md:text-[40px]" style={{ WebkitFontSmoothing: "antialiased", letterSpacing: "-0.035em" }}>
+          {post.title}
+        </h1>
+      </div>
+
+      {/* Content */}
+      <div className="mx-auto max-w-[680px] px-4 sm:px-5 pb-24">
+        <article className="text-[17px] leading-relaxed tracking-tight text-[var(--ios-text-primary)]" style={{ WebkitFontSmoothing: "antialiased" }}>
           <TinaMarkdown
+            data-tina-field={tinaField(post, '_body')}
             content={post._body}
             components={{
               ...components,
             }}
           />
-        </div>
-      </Section>
+        </article>
+      </div>
     </ErrorBoundary>
   );
 }

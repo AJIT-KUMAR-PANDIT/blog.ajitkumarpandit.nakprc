@@ -9,65 +9,74 @@ import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { components } from "../mdx-components";
 import { Icon } from "../icon";
 import { iconSchema } from "../../tina/fields/icon";
-import { Card, CardContent, CardHeader } from "../ui/card";
 import { Section } from "../layout/section";
 import { sectionBlockSchemaField } from '../layout/section';
 
 export const Features = ({ data }: { data: PageBlocksFeatures }) => {
   return (
     <Section background={data.background!}>
-      <div className="@container mx-auto max-w-5xl px-6">
-        <div className="text-center">
-          <h2 data-tina-field={tinaField(data, 'title')} className="text-balance text-4xl font-semibold lg:text-5xl">{data.title}</h2>
-          <p data-tina-field={tinaField(data, 'description')} className="mt-4">{data.description}</p>
+      <div className="mx-auto max-w-[1024px] px-4 sm:px-5">
+        {/* iOS section header */}
+        <div className="mb-3 ml-3.5">
+          <h2
+            data-tina-field={tinaField(data, 'title')}
+            className="text-[22px] font-bold tracking-tight text-[var(--ios-text-primary)]"
+            style={{ WebkitFontSmoothing: "antialiased", letterSpacing: "-0.025em" }}
+          >
+            {data.title}
+          </h2>
         </div>
-        <Card className="@min-4xl:max-w-full @min-4xl:grid-cols-3 @min-4xl:divide-x @min-4xl:divide-y-0 mx-auto mt-8 grid max-w-sm divide-y overflow-hidden shadow-zinc-950/5 *:text-center md:mt-16">
-          {data.items &&
-            data.items.map(function (block, i) {
-              return <Feature key={i} {...block!} />;
-            })}
-        </Card>
+
+        {/* Grouped card container */}
+        <div className="section-card p-0 overflow-hidden" style={{ boxShadow: '0 0 0 0.5px var(--ios-separator), 0 1px 3px rgba(0,0,0,0.04)' }}>
+          {data.items && data.items.map(function (block, i) {
+            return <Feature key={i} {...block!} idx={i} total={data.items!.length} />;
+          })}
+        </div>
+
+        <p data-tina-field={tinaField(data, 'description')} className="mt-3 ml-3.5 text-[15px] leading-relaxed text-[var(--ios-text-secondary)]">
+          {data.description}
+        </p>
       </div>
     </Section>
   )
 }
 
-const CardDecorator = ({ children }: { children: React.ReactNode }) => (
-  <div className="relative mx-auto size-36 duration-200 [--color-border:color-mix(in_oklab,var(--color-zinc-950)10%,transparent)] group-hover:[--color-border:color-mix(in_oklab,var(--color-zinc-950)20%,transparent)] dark:[--color-border:color-mix(in_oklab,var(--color-white)15%,transparent)] dark:group-hover:bg-white/5 dark:group-hover:[--color-border:color-mix(in_oklab,var(--color-white)20%,transparent)]">
-    <div aria-hidden className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:24px_24px]" />
-    <div aria-hidden className="bg-radial to-background absolute inset-0 from-transparent to-75%" />
-    <div className="bg-background absolute inset-0 m-auto flex size-12 items-center justify-center border-l border-t">{children}</div>
-  </div>
-)
-
-export const Feature: React.FC<PageBlocksFeaturesItems> = (data) => {
+const Feature: React.FC<PageBlocksFeaturesItems & { idx: number, total: number }> = (data) => {
+  const isLast = data.idx === data.total - 1;
   return (
-    <div className="group shadow-zinc-950/5">
-      <CardHeader className="pb-3">
-        <CardDecorator>
-          {data.icon && (
-            <Icon
-              tinaField={tinaField(data, "icon")}
-              data={{ size: "large", ...data.icon }}
+    <div className={isLast ? '' : 'border-b border-[var(--ios-separator)]'}>
+      <div className="grouped-list-item !py-4">
+        {/* Icon circle */}
+        {data.icon && (
+          <div className="shrink-0 flex items-center justify-center size-[36px] rounded-xl bg-[var(--ios-blue)]/12 text-[var(--ios-blue)] transition-transform duration-[300ms] ease-[var(--spring-damp)] group-active:scale-90">
+            <Icon data={{ size: "medium", ...data.icon }} />
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <h3
+            data-tina-field={tinaField(data, "title")}
+            className="text-[17px] font-semibold tracking-tight text-[var(--ios-text-primary)]"
+            style={{ WebkitFontSmoothing: "antialiased" }}
+          >
+            {data.title}
+          </h3>
+          <div className="mt-0.5 text-[14px] leading-relaxed text-[var(--ios-text-secondary)]">
+            <TinaMarkdown
+              data-tina-field={tinaField(data, "text")}
+              content={data.text}
+              components={components}
             />
-          )}
-        </CardDecorator>
+          </div>
+        </div>
 
-        <h3
-          data-tina-field={tinaField(data, "title")}
-          className="mt-6 font-medium"
-        >
-          {data.title}
-        </h3>
-      </CardHeader>
-
-      <CardContent className="text-sm pb-8">
-        <TinaMarkdown
-          data-tina-field={tinaField(data, "text")}
-          content={data.text}
-          components={components}
-        />
-      </CardContent>
+        {/* Chevron */}
+        <svg className="size-[17px] shrink-0 text-[var(--ios-text-quaternary)] transition-all duration-300 group-hover:text-[var(--ios-blue)] group-hover:translate-x-[2px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
     </div>
   );
 };
