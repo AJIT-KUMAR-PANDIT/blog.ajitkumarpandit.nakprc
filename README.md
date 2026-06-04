@@ -110,3 +110,37 @@ Licensed under the [Apache 2.0 license](./LICENSE).
 # Repository cleaned of LFS content
 # Repository cleaned of LFS content - Wed Sep 17 15:00:42 AEST 2025
 
+
+
+
+
+
+
+
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+✔ Node v20.20.1 is supported.
+✔ Which package manager would you like to use? › npm
+✔ What is your project named? … .
+✔ What starter code would you like to use? › ⭐ NextJS starter
+✔ Downloading files from repo tinacms/tina-nextjs-starter
+✔ Updating project metadata...
+✖ Failed to install packages: undefined
+✔ Initializing git repository.
+✔ Created blog.ajitkumarpandit.nakprc
+
+ℹ To get started:
+
+  cd blog.ajitkumarpandit.nakprc# move into your project directory
+  npm install         # install dependencies
+  npm run dev         # start the dev server http://localhost:3000
+  npm run build       # build the app for production
+
+Next steps:
+  • 📝 Edit some content: https://tina.io/docs/r/using-tina-editor
+  • 📖 Learn the basics: https://tina.io/docs/r/content-modelling-collections
+  • 🖌️ Extend Tina with custom field components: https://tina.io/docs/r/custom-fields-react
+  • 🚀 Deploy to Production: https://tina.io/docs/r/what-is-tinacloud
+  • 💬 Reach out for support: https://discord.com/invite/zumN63Ybpf
+(base) ajitkumarpandit@AJITs-Mac-Studio blog.ajitkumarpandit.nakprc % npm install
