@@ -102,14 +102,14 @@ export const BottomTabBar = React.forwardRef<HTMLElement, { className?: string }
                 {/* Active indicator pill */}
                 {isActive && (
                   <span
-                    className="absolute top-[8px] h-4 w-[36px] rounded-full bg-[var(--ios-blue)] opacity-[0.12]"
+                    className="absolute top-[8px] h-4 w-[36px] rounded-full bg-violet-600 dark:bg-violet-400 opacity-[0.12]"
                     style={{ transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
                   />
                 )}
                 <span
                   className={cn(
                     "transition-colors duration-200",
-                    isActive ? "text-[var(--ios-blue)]" : "text-[var(--ios-text-tertiary)]",
+                    isActive ? "text-violet-600 dark:text-violet-400" : "text-black dark:text-white",
                   )}
                   style={{ transition: "color 0.3s ease" }}
                 >
@@ -118,7 +118,7 @@ export const BottomTabBar = React.forwardRef<HTMLElement, { className?: string }
                 <span
                   className={cn(
                     "overflow-hidden text-[10px] font-normal transition-all duration-200 truncate max-w-full",
-                    isActive ? "text-[var(--ios-blue)]" : "text-[var(--ios-text-tertiary)]",
+                    isActive ? "text-violet-600 dark:text-violet-400" : "text-black dark:text-white",
                   )}
                   style={{
                     fontSize: isActive ? "10px" : "10px",
