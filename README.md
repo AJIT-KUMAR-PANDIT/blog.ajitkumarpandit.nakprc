@@ -143,4 +143,4 @@ Next steps:
   • 🖌️ Extend Tina with custom field components: https://tina.io/docs/r/custom-fields-react
   • 🚀 Deploy to Production: https://tina.io/docs/r/what-is-tinacloud
   • 💬 Reach out for support: https://discord.com/invite/zumN63Ybpf
-(base) ajitkumarpandit@AJITs-Mac-Studio blog.ajitkumarpandit.nakprc % npm install
+(base)blog.ajitkumarpandit.nakprc % npm install
